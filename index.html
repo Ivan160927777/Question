@@ -1,0 +1,892 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+  >
+
+  <title>Важный вопрос</title>
+
+
+  <style>
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+
+
+    body {
+
+      font-family:
+        Arial,
+        Helvetica,
+        sans-serif;
+
+      background: #f5f5f5;
+
+      color: #222;
+
+      overflow: hidden;
+
+      touch-action: manipulation;
+    }
+
+
+    .page {
+
+      width: 100%;
+
+      min-height: 100dvh;
+
+      display: flex;
+
+      flex-direction: column;
+
+      align-items: center;
+
+      justify-content: center;
+
+      padding:
+        30px
+        20px;
+
+      text-align: center;
+    }
+
+
+    /*
+     * ========================================================
+     * БОЛЬШОЙ ТЕКСТ
+     * ========================================================
+     */
+
+    .text {
+
+      width: min(
+        900px,
+        92vw
+      );
+
+      font-size:
+        clamp(
+          25px,
+          5vw,
+          52px
+        );
+
+      line-height: 1.25;
+
+      font-weight: 700;
+
+      margin-bottom: 55px;
+    }
+
+
+    /*
+     * ========================================================
+     * КНОПКИ
+     * ========================================================
+     */
+
+    .buttons {
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      gap: 25px;
+
+      width: 100%;
+    }
+
+
+    button {
+
+      width: 170px;
+
+      height: 68px;
+
+      border: none;
+
+      border-radius: 15px;
+
+      font-size: 27px;
+
+      font-weight: bold;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 6px 20px
+        rgba(
+          0,
+          0,
+          0,
+          0.15
+        );
+
+      transition:
+        transform 0.2s ease,
+        left 0.25s ease,
+        top 0.25s ease;
+
+      user-select: none;
+
+      -webkit-user-select: none;
+
+      touch-action: none;
+    }
+
+
+    #yesButton {
+
+      background: #35c759;
+
+      color: white;
+    }
+
+
+    #noButton {
+
+      background: #ff3b30;
+
+      color: white;
+    }
+
+
+    /*
+     * Когда НЕТ начинает убегать.
+     */
+
+    #noButton.running {
+
+      position: fixed;
+
+      z-index: 1000;
+    }
+
+
+    /*
+     * ========================================================
+     * РЕЗУЛЬТАТ
+     * ========================================================
+     */
+
+    #result {
+
+      display: none;
+
+      width: min(
+        800px,
+        90vw
+      );
+
+      margin-top: 40px;
+
+      font-size:
+        clamp(
+          24px,
+          5vw,
+          48px
+        );
+
+      line-height: 1.25;
+
+      font-weight: bold;
+
+      color: #35a853;
+
+      animation:
+        appear 0.5s ease;
+    }
+
+
+    @keyframes appear {
+
+      from {
+
+        opacity: 0;
+
+        transform:
+          scale(0.8);
+      }
+
+      to {
+
+        opacity: 1;
+
+        transform:
+          scale(1);
+      }
+    }
+
+
+    /*
+     * ========================================================
+     * ТЕЛЕФОН
+     * ========================================================
+     */
+
+    @media (max-width: 600px) {
+
+      .text {
+
+        width: 92vw;
+
+        font-size:
+          clamp(
+            24px,
+            7vw,
+            36px
+          );
+
+        margin-bottom: 45px;
+      }
+
+
+      .buttons {
+
+        gap: 12px;
+      }
+
+
+      button {
+
+        width: 140px;
+
+        height: 60px;
+
+        font-size: 23px;
+
+        border-radius: 13px;
+      }
+
+    }
+
+
+    /*
+     * Очень маленький телефон.
+     */
+
+    @media (max-width: 360px) {
+
+      .text {
+
+        font-size: 23px;
+      }
+
+
+      button {
+
+        width: 125px;
+
+        height: 55px;
+
+        font-size: 21px;
+      }
+
+    }
+
+  </style>
+
+</head>
+
+
+<body>
+
+
+  <main class="page">
+
+
+    <!-- =====================================================
+         ТЕКСТ
+         =====================================================
+
+         ЗАМЕНИ ЭТОТ ТЕКСТ НА СВОЙ.
+    -->
+
+    <div class="text">
+
+     Сходим попить кофе?
+
+      <br><br>
+
+
+    </div>
+
+
+    <!-- =====================================================
+         КНОПКИ
+         ===================================================== -->
+
+    <div class="buttons">
+
+      <button id="yesButton">
+        ДА
+      </button>
+
+      <button id="noButton">
+        НЕТ
+      </button>
+
+    </div>
+
+
+    <!-- =====================================================
+         РЕЗУЛЬТАТ ПОСЛЕ ДА
+         ===================================================== -->
+
+    <div id="result">
+
+      подробности уточняйте
+      в личном сообщении
+
+    </div>
+
+
+  </main>
+
+
+  <script>
+
+
+    /*
+     * ========================================================
+     * GOOGLE APPS SCRIPT
+     * ========================================================
+     *
+     * СЮДА НУЖНО ВСТАВИТЬ URL
+     * ВАШЕГО РАЗВЁРНУТОГО APPS SCRIPT.
+     *
+     * Пример:
+     *
+     * https://script.google.com/macros/s/ABC123.../exec
+     *
+     */
+
+    const GOOGLE_SCRIPT_URL =
+      "https://script.google.com/macros/s/AKfycbyzmimPzdG3rd4VFepyP3JkaxZkzlfQJYhsWvNPz3OvT_NUhW0ojJg94xMdtq082p5s_g/exec";
+
+
+    /*
+     * ========================================================
+     * ЭЛЕМЕНТЫ
+     * ========================================================
+     */
+
+    const yesButton =
+      document.getElementById(
+        "yesButton"
+      );
+
+
+    const noButton =
+      document.getElementById(
+        "noButton"
+      );
+
+
+    const result =
+      document.getElementById(
+        "result"
+      );
+
+
+    /*
+     * ========================================================
+     * ОПРЕДЕЛЕНИЕ УСТРОЙСТВА
+     * ========================================================
+     */
+
+    function getDevice() {
+
+      if (
+        /Mobi|Android|iPhone|iPad/i
+          .test(navigator.userAgent)
+      ) {
+
+        return "Телефон";
+
+      }
+
+      return "Компьютер";
+    }
+
+
+    /*
+     * ========================================================
+     * ОТПРАВКА СОБЫТИЯ В GOOGLE
+     * ========================================================
+     */
+
+    function sendEvent(action) {
+
+
+      /*
+       * Если URL ещё не вставлен,
+       * просто показываем сообщение
+       * в консоли.
+       */
+
+      if (
+        GOOGLE_SCRIPT_URL
+          .startsWith(
+            "ВСТАВЬТЕ_"
+          )
+      ) {
+
+        console.log(
+          "Событие:",
+          action
+        );
+
+        return;
+      }
+
+
+      const data = {
+
+        action: action,
+
+        device: getDevice(),
+
+        page:
+          window.location.href
+      };
+
+
+      /*
+       * Используем no-cors.
+       *
+       * Нам не нужно получать
+       * содержимое ответа Google.
+       *
+       * Главное — передать событие.
+       */
+
+      fetch(
+        GOOGLE_SCRIPT_URL,
+        {
+
+          method: "POST",
+
+          mode: "no-cors",
+
+          headers: {
+            "Content-Type":
+              "text/plain;charset=utf-8"
+          },
+
+          body:
+            JSON.stringify(data)
+
+        }
+      )
+      .catch(
+        function(error) {
+
+          console.error(
+            "Ошибка отправки:",
+            error
+          );
+
+        }
+      );
+
+    }
+
+
+    /*
+     * ========================================================
+     * КНОПКА ДА
+     * ========================================================
+     */
+
+    yesButton.addEventListener(
+      "click",
+      function() {
+
+
+        /*
+         * Записываем событие.
+         */
+
+        sendEvent("ДА");
+
+
+        /*
+         * Показываем результат.
+         */
+
+        result.style.display =
+          "block";
+
+
+        /*
+         * Убираем кнопки.
+         */
+
+        yesButton.style.display =
+          "none";
+
+
+        noButton.style.display =
+          "none";
+
+      }
+    );
+
+
+    /*
+     * ========================================================
+     * КНОПКА НЕТ
+     * ========================================================
+     */
+
+    let noScale = 1;
+
+    let moving = false;
+
+
+    function moveNoButton() {
+
+
+      /*
+       * Защита от нескольких
+       * одновременных срабатываний.
+       */
+
+      if (moving) {
+        return;
+      }
+
+
+      moving = true;
+
+
+      /*
+       * Уменьшаем кнопку.
+       */
+
+      noScale *= 0.82;
+
+
+      /*
+       * Не даём ей стать
+       * совсем микроскопической.
+       */
+
+      if (noScale < 0.25) {
+
+        noScale = 0.25;
+
+      }
+
+
+      /*
+       * Переводим кнопку
+       * в свободное положение.
+       */
+
+      noButton.classList.add(
+        "running"
+      );
+
+
+      noButton.style.transform =
+        `scale(${noScale})`;
+
+
+      /*
+       * Размер кнопки.
+       */
+
+      const rect =
+        noButton.getBoundingClientRect();
+
+
+      const width =
+        rect.width;
+
+
+      const height =
+        rect.height;
+
+
+      /*
+       * Отступ от края экрана.
+       */
+
+      const margin = 15;
+
+
+      /*
+       * Максимальная координата.
+       */
+
+      const maxX =
+        Math.max(
+          margin,
+          window.innerWidth -
+            width -
+            margin
+        );
+
+
+      const maxY =
+        Math.max(
+          margin,
+          window.innerHeight -
+            height -
+            margin
+        );
+
+
+      /*
+       * Случайная координата.
+       */
+
+      const x =
+        margin +
+        Math.random() *
+        Math.max(
+          0,
+          maxX - margin
+        );
+
+
+      const y =
+        margin +
+        Math.random() *
+        Math.max(
+          0,
+          maxY - margin
+        );
+
+
+      /*
+       * Перемещаем кнопку.
+       */
+
+      noButton.style.left =
+        `${x}px`;
+
+
+      noButton.style.top =
+        `${y}px`;
+
+
+      /*
+       * Записываем событие.
+       */
+
+      sendEvent(
+        "НЕТ — попытка нажать"
+      );
+
+
+      /*
+       * Небольшая пауза.
+       */
+
+      setTimeout(
+        function() {
+
+          moving = false;
+
+        },
+        250
+      );
+
+    }
+
+
+    /*
+     * ========================================================
+     * КОМПЬЮТЕР
+     * ========================================================
+     *
+     * При наведении мыши НЕТ убегает.
+     */
+
+    noButton.addEventListener(
+      "mouseenter",
+      function() {
+
+        moveNoButton();
+
+      }
+    );
+
+
+    /*
+     * ========================================================
+     * ТЕЛЕФОН
+     * ========================================================
+     *
+     * pointerdown срабатывает
+     * при касании пальцем.
+     */
+
+    noButton.addEventListener(
+      "pointerdown",
+      function(event) {
+
+
+        if (
+          event.pointerType === "touch"
+        ) {
+
+          event.preventDefault();
+
+          moveNoButton();
+
+        }
+
+      },
+      {
+        passive: false
+      }
+    );
+
+
+    /*
+     * ========================================================
+     * ЗАПАСНОЙ ОБРАБОТЧИК
+     * ========================================================
+     *
+     * Если НЕТ всё-таки удалось
+     * нажать мышкой.
+     */
+
+    noButton.addEventListener(
+      "click",
+      function(event) {
+
+
+        if (
+          event.pointerType === "touch"
+        ) {
+
+          return;
+
+        }
+
+
+        sendEvent(
+          "НЕТ — нажатие"
+        );
+
+
+        moveNoButton();
+
+      }
+    );
+
+
+    /*
+     * ========================================================
+     * ПОВОРОТ ТЕЛЕФОНА
+     * ========================================================
+     *
+     * После поворота стараемся
+     * оставить кнопку внутри экрана.
+     */
+
+    window.addEventListener(
+      "resize",
+      function() {
+
+
+        if (
+          !noButton.classList.contains(
+            "running"
+          )
+        ) {
+
+          return;
+
+        }
+
+
+        const rect =
+          noButton.getBoundingClientRect();
+
+
+        const maxX =
+          Math.max(
+            10,
+            window.innerWidth -
+              rect.width -
+              10
+          );
+
+
+        const maxY =
+          Math.max(
+            10,
+            window.innerHeight -
+              rect.height -
+              10
+          );
+
+
+        const currentX =
+          parseFloat(
+            noButton.style.left
+          ) || 10;
+
+
+        const currentY =
+          parseFloat(
+            noButton.style.top
+          ) || 10;
+
+
+        noButton.style.left =
+          `${Math.min(
+            Math.max(
+              10,
+              currentX
+            ),
+            maxX
+          )}px`;
+
+
+        noButton.style.top =
+          `${Math.min(
+            Math.max(
+              10,
+              currentY
+            ),
+            maxY
+          )}px`;
+
+      }
+    );
+
+
+  </script>
+
+
+</body>
+
+</html>
+
